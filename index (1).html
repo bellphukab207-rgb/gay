@@ -1,0 +1,2357 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chef Friend Studio — เกมทำอาหารจากรูปเพื่อนรอบโลก</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fff8f0;
+      --bg-pattern: #f7ecdf;
+      --surface: #ffffff;
+      --surface-warm: #fff3e4;
+      --border: #ead5be;
+      --border-strong: #d5b493;
+      --ink: #2c1e14;
+      --muted: #785f4c;
+      --brand: #e04f26;
+      --brand-hover: #c43d17;
+      --brand-ink: #ffffff;
+      --accent: #f59e0b;
+      --accent-soft: #fef3c7;
+      --herb: #16a34a;
+      --herb-soft: #dcfce7;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 6px 20px rgba(84, 43, 14, 0.08), 0 2px 6px rgba(84, 43, 14, 0.05);
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --font-display: 'Kanit', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-body: 'Sarabun', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      color: var(--ink);
+      background-color: var(--bg);
+      background-image: radial-gradient(var(--bg-pattern) 1.5px, transparent 1.5px);
+      background-size: 22px 22px;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .kitchen-header {
+      background: linear-gradient(135deg, #b93815 0%, #e04f26 55%, #f59e0b 100%);
+      color: #ffffff;
+      border-bottom: 4px solid #8f280c;
+      box-shadow: 0 4px 14px rgba(143, 40, 12, 0.2);
+    }
+
+    .header-inner {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: var(--space-4) var(--space-6);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .brand-badge {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: #fff8f0;
+      color: var(--brand);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-subtitle {
+      margin: 2px 0 0;
+      font-size: 13.5px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      align-items: center;
+    }
+
+    /* Station Stepper */
+    .station-nav {
+      max-width: 1260px;
+      margin: var(--space-4) auto 0;
+      padding: 0 var(--space-6);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: var(--space-3);
+    }
+
+    .station-tab {
+      font-family: var(--font-display);
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      color: var(--ink);
+      text-align: left;
+      transition: all 0.16s ease;
+      box-shadow: 0 2px 5px rgba(44, 30, 20, 0.04);
+    }
+
+    .station-tab:hover {
+      border-color: var(--brand);
+      transform: translateY(-1px);
+    }
+
+    .station-tab.active {
+      background: var(--surface-warm);
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(224, 79, 38, 0.15);
+    }
+
+    .station-num {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--bg-pattern);
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .station-tab.active .station-num {
+      background: var(--brand);
+      color: #ffffff;
+    }
+
+    .station-label {
+      font-size: 15px;
+      font-weight: 600;
+      display: block;
+      line-height: 1.2;
+    }
+
+    .station-desc {
+      font-family: var(--font-body);
+      font-size: 12px;
+      color: var(--muted);
+      display: block;
+    }
+
+    /* Main Layout */
+    .workspace {
+      max-width: 1260px;
+      margin: var(--space-4) auto var(--space-8);
+      padding: 0 var(--space-6);
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: var(--space-6);
+      align-items: start;
+    }
+
+    @media (max-width: 960px) {
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: var(--space-4);
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 600;
+      margin: 0 0 var(--space-3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-2);
+      color: var(--ink);
+      border-bottom: 1px dashed var(--border);
+      padding-bottom: var(--space-2);
+    }
+
+    .control-section {
+      display: none;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+
+    .control-section.active {
+      display: flex;
+    }
+
+    /* Buttons & Inputs */
+    .btn {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 9px 14px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      transition: all 0.15s ease;
+      text-decoration: none;
+      line-height: 1.2;
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--brand);
+      outline-offset: 2px;
+    }
+
+    .btn-primary {
+      background: var(--brand);
+      color: var(--brand-ink);
+      box-shadow: 0 2px 0 #9e3010;
+    }
+
+    .btn-primary:hover {
+      background: var(--brand-hover);
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px);
+    }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--ink);
+      border-color: var(--border-strong);
+    }
+
+    .btn-secondary:hover {
+      background: var(--surface-warm);
+      border-color: var(--brand);
+    }
+
+    .btn-secondary.active-tool {
+      background: var(--accent-soft);
+      border-color: var(--brand);
+      color: #9a3412;
+      font-weight: 600;
+    }
+
+    .btn-herb {
+      background: var(--herb);
+      color: #ffffff;
+      box-shadow: 0 2px 0 #117835;
+    }
+
+    .btn-herb:hover {
+      background: #15803d;
+    }
+
+    .btn-sm {
+      padding: 6px 10px;
+      font-size: 13px;
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .field-hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--brand);
+      cursor: pointer;
+    }
+
+    input[type="text"], select {
+      width: 100%;
+      padding: 8px 11px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border-strong);
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--ink);
+      background: #ffffff;
+    }
+
+    input[type="text"]:focus, select:focus {
+      outline: 2px solid var(--brand);
+      border-color: transparent;
+    }
+
+    /* Upload Dropzone */
+    .upload-zone {
+      border: 2px dashed var(--brand);
+      background: var(--surface-warm);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .upload-zone:hover {
+      background: #ffe8cc;
+    }
+
+    .upload-zone input[type="file"] {
+      display: none;
+    }
+
+    /* Grid palettes */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .ingredient-chip {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 8px 6px;
+      font-family: var(--font-display);
+      font-size: 12.5px;
+      color: var(--ink);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      transition: all 0.14s ease;
+    }
+
+    .ingredient-chip span.ico {
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .ingredient-chip:hover {
+      border-color: var(--brand);
+      background: var(--surface-warm);
+      transform: translateY(-1px);
+    }
+
+    .ingredient-chip.selected {
+      background: var(--accent-soft);
+      border-color: var(--brand);
+      box-shadow: 0 0 0 2px rgba(224, 79, 38, 0.16);
+      font-weight: 600;
+    }
+
+    /* Stage / Interactive Canvas Area */
+    .stage-panel {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .stage-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-2);
+      background: var(--surface-warm);
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+    }
+
+    .stage-status {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .canvas-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      max-height: 620px;
+      background: #2b211b;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 3px solid var(--border-strong);
+      box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: none;
+      user-select: none;
+    }
+
+    canvas#gameCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: crosshair;
+    }
+
+    /* Empty Overlay on Canvas when no photo uploaded yet */
+    .empty-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(34, 23, 16, 0.82);
+      backdrop-filter: blur(4px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-6);
+      text-align: center;
+      color: #ffffff;
+      z-index: 10;
+    }
+
+    .empty-overlay.hidden {
+      display: none;
+    }
+
+    .empty-card {
+      max-width: 430px;
+      background: var(--surface);
+      color: var(--ink);
+      padding: var(--space-6);
+      border-radius: var(--radius-lg);
+      border: 3px solid var(--brand);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .empty-card h2 {
+      font-family: var(--font-display);
+      margin: 8px 0;
+      font-size: 22px;
+    }
+
+    .empty-card p {
+      font-size: 14px;
+      color: var(--muted);
+      margin: 0 0 var(--space-4);
+    }
+
+    /* Heat Meter */
+    .heat-bar {
+      height: 12px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #fde047 0%, #f97316 55%, #dc2626 85%, #451a03 100%);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border-strong);
+    }
+
+    .badge-pill {
+      font-family: var(--font-display);
+      font-size: 12px;
+      padding: 2px 9px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #9a3412;
+      font-weight: 600;
+    }
+
+    /* Save / Export Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(28, 19, 13, 0.72);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-4);
+      z-index: 100;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 2px solid var(--border-strong);
+      max-width: 640px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: var(--space-6);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    .modal-preview-img {
+      width: 100%;
+      max-height: 360px;
+      object-fit: contain;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--border);
+      background: #1f1712;
+      display: block;
+      margin: var(--space-3) 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="kitchen-header">
+    <div class="header-inner">
+      <div class="brand-group">
+        <div class="brand-badge" aria-hidden="true">👨‍🍳</div>
+        <div>
+          <h1 class="brand-title">Chef Friend World Kitchen</h1>
+          <p class="brand-subtitle">จับรูปเพื่อนมาลบพื้นหลัง หั่นอิสระ ผัด-ต้ม-ย่าง และจัดจานเมนูเด็ดทั่วโลก</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <label class="btn btn-secondary" for="quickUploadInput" style="cursor:pointer;">
+          📷 เปลี่ยนรูปเพื่อน
+        </label>
+        <input id="quickUploadInput" type="file" accept="image/*" style="display:none;">
+        <button type="button" class="btn btn-herb" id="openExportModalBtn">
+          💾 เซฟรูปอาหาร &amp; ดาวน์โหลด ZIP
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 4 Cooking Stations Navigation -->
+  <nav class="station-nav" aria-label="ขั้นตอนการทำอาหาร">
+    <button type="button" class="station-tab active" data-station="prep">
+      <span class="station-num">1</span>
+      <span>
+        <span class="station-label">เตรียมวัตถุดิบ &amp; ลบพื้นหลัง</span>
+        <span class="station-desc">อัปโหลดรูปเพื่อน &amp; ตัดฉากหลังอัตโนมัติ</span>
+      </span>
+    </button>
+    <button type="button" class="station-tab" data-station="slice">
+      <span class="station-num">2</span>
+      <span>
+        <span class="station-label">เขียงหั่นอิสระ</span>
+        <span class="station-desc">ลากมีดหั่นรูปเพื่อนได้ทุกองศา</span>
+      </span>
+    </button>
+    <button type="button" class="station-tab" data-station="cook">
+      <span class="station-num">3</span>
+      <span>
+        <span class="station-label">เตาปรุง &amp; โรยเครื่องเทศ</span>
+        <span class="station-desc">ผัด ทอด ต้ม ย่าง เร่งไฟ &amp; ปรุงรสอิสระ</span>
+      </span>
+    </button>
+    <button type="button" class="station-tab" data-station="plate">
+      <span class="station-num">4</span>
+      <span>
+        <span class="station-label">จัดจานเมนูทั่วโลก</span>
+        <span class="station-desc">เลือกจานนานาชาติ ตกแต่ง &amp; เซฟผลงาน</span>
+      </span>
+    </button>
+  </nav>
+
+  <!-- Main Workspace -->
+  <main class="workspace">
+    <!-- Left Sidebar Controls -->
+    <aside class="card">
+
+      <!-- STATION 1: PREP & AUTO BG REMOVAL -->
+      <div class="control-section active" id="panel-prep">
+        <div class="card-title">
+          <span>1. เตรียมวัตถุดิบ (รูปเพื่อน)</span>
+          <span class="badge-pill" id="bgStatusBadge">พร้อมใช้งาน</span>
+        </div>
+
+        <label class="upload-zone" for="mainFileInput">
+          <div style="font-size:28px; margin-bottom:4px;">🥩 📸</div>
+          <div style="font-family:var(--font-display); font-weight:600; font-size:15px;">คลิกเพื่อเลือกรูปเพื่อนจากเครื่อง</div>
+          <div class="field-hint">รองรับ JPG, PNG, WEBP (ระบบจะลบพื้นหลังให้อัตโนมัติทันที)</div>
+          <input id="mainFileInput" type="file" accept="image/*">
+        </label>
+
+        <div class="field-group">
+          <div class="field-label">
+            <span>ระบบลบพื้นหลังอัตโนมัติ (Auto Cutout)</span>
+            <span id="toleranceValueLabel">38%</span>
+          </div>
+          <input type="range" id="bgToleranceSlider" min="5" max="90" value="38">
+          <p class="field-hint">ปรับความเข้มข้นในการตัดสีพื้นหลังรอบขอบภาพอัตโนมัติ</p>
+        </div>
+
+        <div class="grid-2">
+          <button type="button" class="btn btn-primary btn-sm" id="runAutoBgBtn">
+            ✨ ลบพื้นหลังอัตโนมัติ
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm" id="restoreOriginalBgBtn">
+            ↩️ คืนค่ารูปต้นฉบับ
+          </button>
+        </div>
+
+        <div class="field-group" style="border-top:1px dashed var(--border); padding-top:12px;">
+          <div class="field-label"><span>เครื่องมือเก็บรายละเอียด (คลิกบนรูปได้เลย)</span></div>
+          <div class="grid-3">
+            <button type="button" class="btn btn-secondary btn-sm active-tool" data-prep-tool="wand">
+              🪄 จิ้มสีเพื่อลบ
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" data-prep-tool="erase">
+              🧽 ยางลบถู
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" data-prep-tool="restore">
+              🖌️ วาดคืนภาพ
+            </button>
+          </div>
+          <div class="field-label" style="margin-top:6px;">
+            <span>ขนาดหัวแปรง</span>
+            <span id="brushSizeLabel">26 px</span>
+          </div>
+          <input type="range" id="brushSizeSlider" min="8" max="70" value="26">
+        </div>
+
+        <button type="button" class="btn btn-herb btn-block" id="goToSliceBtn">
+          ส่งขึ้นเขียงหั่นอิสระ ➡️
+        </button>
+      </div>
+
+      <!-- STATION 2: FREEFORM SLICING -->
+      <div class="control-section" id="panel-slice">
+        <div class="card-title">
+          <span>2. เขียงหั่นอิสระ (Free Slice)</span>
+          <span class="badge-pill" id="pieceCountBadge">1 ชิ้น</span>
+        </div>
+
+        <p class="field-hint" style="margin-top:-4px;">
+          ลากเส้นผ่านรูปเพื่อนบนเขียงเพื่อหั่นแยกออกเป็นชิ้นๆ ได้อิสระทุกทิศทาง หรือเลือกหยิบชิ้นส่วนมาเรียงใหม่
+        </p>
+
+        <div class="field-group">
+          <div class="field-label"><span>โหมดอุปกรณ์บนเขียง</span></div>
+          <div class="grid-2">
+            <button type="button" class="btn btn-secondary active-tool" id="toolKnifeBtn">
+              🔪 มีดหั่นอิสระ (ลากฟัน)
+            </button>
+            <button type="button" class="btn btn-secondary" id="toolHandBtn">
+              🤚 มือหยิบย้าย/หมุนชิ้น
+            </button>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label"><span>ท่าหั่นด่วนพิเศษ (Quick Chop)</span></div>
+          <div class="grid-2">
+            <button type="button" class="btn btn-secondary btn-sm" id="quickSliceStripsBtn">
+              🥓 หั่นเป็นเส้นสไลซ์
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" id="quickDiceBtn">
+              🎲 หั่นเต๋าลูกเต๋า
+            </button>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <button type="button" class="btn btn-secondary btn-sm" id="resetSlicesBtn">
+            🔄 รวมร่างกลับเป็นชิ้นเดียว
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm" id="scatterPiecesBtn">
+            💨 กระจายชิ้นส่วน
+          </button>
+        </div>
+
+        <button type="button" class="btn btn-herb btn-block" id="goToCookBtn">
+          เทลงกระทะไปปรุงอาหาร ➡️
+        </button>
+      </div>
+
+      <!-- STATION 3: FREEFORM COOKING & SEASONING -->
+      <div class="control-section" id="panel-cook">
+        <div class="card-title">
+          <span>3. เตาปรุงอาหาร &amp; เครื่องเทศ</span>
+          <span class="badge-pill" id="cookDonenessBadge">ดิบ (0%)</span>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label"><span>เลือกวิธีปรุง (Cooking Method)</span></div>
+          <div class="grid-3">
+            <button type="button" class="ingredient-chip selected" data-cook-mode="fry">
+              <span class="ico">🍳</span>
+              <span>ผัด/ทอดกระทะ</span>
+            </button>
+            <button type="button" class="ingredient-chip" data-cook-mode="boil">
+              <span class="ico">🍲</span>
+              <span>ต้มซุปเดือดๆ</span>
+            </button>
+            <button type="button" class="ingredient-chip" data-cook-mode="grill">
+              <span class="ico">🔥</span>
+              <span>ย่างเตาถ่าน</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">
+            <span>ระดับไฟเตาแก๊ส (Heat Level)</span>
+            <span id="heatLevelText">ไฟกลาง 🔥</span>
+          </div>
+          <input type="range" id="heatSlider" min="0" max="100" value="55">
+          <div class="heat-bar" aria-hidden="true"></div>
+        </div>
+
+        <div class="grid-2">
+          <button type="button" class="btn btn-primary btn-sm" id="stirTossBtn">
+            🥄 ผัดคลุก / พลิกกลับด้าน
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm" id="resetCookBtn">
+            ❄️ ล้างความสุกใหม่
+          </button>
+        </div>
+
+        <div class="field-group" style="border-top:1px dashed var(--border); padding-top:10px;">
+          <div class="field-label">
+            <span>คลิกเลือกเครื่องปรุงแล้วโรยลงกระทะได้เลย!</span>
+          </div>
+          <div class="grid-3" id="seasoningPalette">
+            <button type="button" class="ingredient-chip selected" data-item="chili">
+              <span class="ico">🌶️</span><span>พริกจินดา</span>
+            </button>
+            <button type="button" class="ingredient-chip" data-item="basil">
+              <span class="ico">🌿</span><span>ใบกะเพรา</span>
+            </button>
+            <button type="button" class="ingredient-chip" data-item="garlic">
+              <span class="ico">🧄</span><span>กระเทียมเจียว</span>
+            </button>
+            <button type="button" class="ingredient-chip" data-item="pepper">
+              <span class="ico">🧂</span><span>พริกไทยดำ</span>
+            </button>
+            <button type="button" class="ingredient-chip" data-item="cheese">
+              <span class="ico">🧀</span><span>ชีสยืดๆ</span>
+            </button>
+            <button type="button" class="ingredient-chip" data-item="egg">
+              <span class="ico">🍳</span><span>ไข่ดาวเยิ้ม</span>
+            </button>
+            <button type="button" class="ingredient-chip" data-item="shrimp">
+              <span class="ico">🍤</span><span>กุ้งแม่น้ำ</span>
+            </button>
+            <button type="button" class="ingredient-chip" data-item="mushroom">
+              <span class="ico">🍄</span><span>เห็ดทรัฟเฟิล</span>
+            </button>
+            <button type="button" class="ingredient-chip" data-item="sauce_red">
+              <span class="ico">🥫</span><span>ราดซอสพริก</span>
+            </button>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-herb btn-block" id="goToPlateBtn">
+          ตักเสิร์ฟใส่จานเมนูทั่วโลก ➡️
+        </button>
+      </div>
+
+      <!-- STATION 4: GLOBAL DISH PLATING -->
+      <div class="control-section" id="panel-plate">
+        <div class="card-title">
+          <span>4. จัดจานเมนูดังทั่วโลก</span>
+          <span class="badge-pill">พร้อมเสิร์ฟ</span>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label"><span>เลือกฐานเมนูอาหารนานาชาติ</span></div>
+          <div class="grid-2" id="worldDishPalette">
+            <button type="button" class="ingredient-chip selected" data-dish="thai_kaprao">
+              <span class="ico">🇹🇭</span><span>กะเพราถาดยักษ์</span>
+            </button>
+            <button type="button" class="ingredient-chip" data-dish="thai_tomyum">
+              <span class="ico">🍲</span><span>ต้มยำกุ้งหม้อไฟ</span>
+            </button>
+            <button type="button" class="ingredient-chip" data-dish="japan_ramen">
+              <span class="ico">🇯🇵</span><span>ราเมงทงคตสึ</span>
+            </button>
+            <button type="button" class="ingredient-chip" data-dish="japan_sushi">
+              <span class="ico">🍣</span><span>ซูชิโอมากาเสะ</span>
+            </button>
+            <button type="button" class="ingredient-chip" data-dish="italy_pizza">
+              <span class="ico">🇮🇹</span><span>พิซซ่าเตาถ่าน</span>
+            </button>
+            <button type="button" class="ingredient-chip" data-dish="usa_burger">
+              <span class="ico">🇺🇸</span><span>สเต็ก &amp; เบอร์เกอร์</span>
+            </button>
+            <button type="button" class="ingredient-chip" data-dish="mexico_taco">
+              <span class="ico">🇲🇽</span><span>ทาโก้เม็กซิกัน</span>
+            </button>
+            <button type="button" class="ingredient-chip" data-dish="korea_bibimbap">
+              <span class="ico">🇰🇷</span><span>บิบิมบับหม้อหิน</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="dishCustomTitle">ตั้งชื่อเมนูสุดปั่นประจำตัวเพื่อน</label>
+          <input type="text" id="dishCustomTitle" value="กะเพราเพื่อนรักสับละเอียดพิเศษไข่ดาว" maxlength="60">
+        </div>
+
+        <div class="field-group">
+          <div class="field-label"><span>ปรับแต่งชิ้นเนื้อเพื่อนที่เลือกอยู่</span></div>
+          <div class="grid-3">
+            <button type="button" class="btn btn-secondary btn-sm" id="scaleUpPieceBtn">➕ ขยายชิ้น</button>
+            <button type="button" class="btn btn-secondary btn-sm" id="scaleDownPieceBtn">➖ ย่อชิ้น</button>
+            <button type="button" class="btn btn-secondary btn-sm" id="rotatePieceBtn">🔄 หมุน 30°</button>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top:4px;">
+          <button type="button" class="btn btn-primary" id="savePngDirectBtn">
+            📸 เซฟรูป (PNG)
+          </button>
+          <button type="button" class="btn btn-herb" id="downloadZipDirectBtn">
+            📦 โหลดไฟล์ ZIP
+          </button>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- Right Interactive Game Stage -->
+    <section class="stage-panel">
+      <div class="stage-toolbar">
+        <div class="stage-status" id="stageStatusText">
+          <span>🔪 ขั้นตอนที่ 1: อัปโหลดรูปเพื่อนเพื่อเริ่มลบพื้นหลังอัตโนมัติ</span>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <button type="button" class="btn btn-secondary btn-sm" id="clearToppingsBtn">
+            🧹 เคลียร์เครื่องปรุงที่โรย
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm" id="centerPiecesBtn">
+            🎯 จัดเรียงกลางจาน
+          </button>
+        </div>
+      </div>
+
+      <div class="canvas-wrapper">
+        <canvas id="gameCanvas" width="880" height="660"></canvas>
+
+        <!-- Friendly Empty State until the user uploads a photo -->
+        <div class="empty-overlay" id="emptyStateOverlay">
+          <div class="empty-card">
+            <div style="font-size:44px; line-height:1;">🍲🔪🧑‍🍳</div>
+            <h2>เริ่มเข้าครัวทำเมนูเพื่อนรัก!</h2>
+            <p>
+              อัปโหลดรูปเพื่อนของคุณเพื่อตัดพื้นหลังอัตโนมัติ แล้วนำไปหั่นอิสระบนเขียง ผัดไฟลุกในกระทะ และจัดเสิร์ฟเป็นเมนูดังทั่วโลก
+            </p>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <label class="btn btn-primary btn-block" for="emptyUploadInput" style="cursor:pointer; font-size:16px; padding:12px;">
+                📸 เลือกรูปเพื่อนจากเครื่อง
+              </label>
+              <input id="emptyUploadInput" type="file" accept="image/*" style="display:none;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Export / Save Preview & ZIP Modal -->
+  <div class="modal-backdrop" id="exportModal" role="dialog" aria-modal="true" aria-labelledby="exportModalTitle">
+    <div class="modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h2 id="exportModalTitle" style="font-family:var(--font-display); margin:0; font-size:20px;">
+          🍽️ เมนูของคุณพร้อมเสิร์ฟแล้ว!
+        </h2>
+        <button type="button" class="btn btn-secondary btn-sm" id="closeExportModalBtn">✕ ปิด</button>
+      </div>
+      <p class="field-hint" style="margin-top:4px;">
+        คุณสามารถกดปุ่มดาวน์โหลดรูปภาพ PNG หรือดาวน์โหลดแพ็กเกจไฟล์ <strong>.ZIP</strong> (ประกอบด้วยรูปเมนูอาหารที่ทำเสร็จ + ใบสูตรอาหาร JSON/HTML) หรือคลิกขวาที่รูปด้านล่างเพื่อบันทึกรูปภาพได้ทันที
+      </p>
+      <img id="exportPreviewImage" class="modal-preview-img" alt="ตัวอย่างเมนูอาหารที่ปรุงเสร็จแล้ว">
+      <div class="grid-2" style="margin-top:14px;">
+        <a id="modalDownloadPngLink" class="btn btn-primary" download="chef-friend-dish.png" href="#">
+          🖼️ ดาวน์โหลดรูปภาพ (.PNG)
+        </a>
+        <a id="modalDownloadZipLink" class="btn btn-herb" download="chef-friend-cooking-pack.zip" href="#">
+          📦 ดาวน์โหลดแพ็กเกจ (.ZIP)
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const canvas = document.getElementById('gameCanvas');
+      const ctx = canvas.getContext('2d');
+
+      // Offscreen canvases for image processing & background removal
+      const rawCanvas = document.createElement('canvas');
+      const rawCtx = rawCanvas.getContext('2d', { willReadFrequently: true });
+
+      const maskedCanvas = document.createElement('canvas');
+      const maskedCtx = maskedCanvas.getContext('2d', { willReadFrequently: true });
+
+      // App State
+      const state = {
+        hasImage: false,
+        station: 'prep', // 'prep' | 'slice' | 'cook' | 'plate'
+        prepTool: 'wand', // 'wand' | 'erase' | 'restore'
+        bgTolerance: 38,
+        brushSize: 26,
+        sliceTool: 'knife', // 'knife' | 'hand'
+        cookMode: 'fry', // 'fry' | 'boil' | 'grill'
+        heatLevel: 55,
+        doneness: 0, // 0 to 100
+        selectedSeasoning: 'chili',
+        selectedDish: 'thai_kaprao',
+        dishTitle: 'กะเพราเพื่อนรักสับละเอียดพิเศษไข่ดาว',
+        // Polygonal pieces in normalized image coordinates [0..1] + canvas position/rotation/scale
+        pieces: [],
+        activePieceIndex: -1,
+        draggingPiece: false,
+        dragOffsetX: 0,
+        dragOffsetY: 0,
+        // Knife slice line
+        isDrawingSlice: false,
+        sliceStart: null,
+        sliceEnd: null,
+        // Prep brush painting
+        isBrushing: false,
+        // Seasonings & toppings dropped on food
+        toppings: [],
+        // Animated particles (steam, sizzle, bubbles, fire)
+        particles: []
+      };
+
+      const WORLD_DISHES = {
+        thai_kaprao: {
+          name: '🇹🇭 กะเพราถาดยักษ์ (Thailand)',
+          defaultTitle: 'กะเพราเพื่อนรักสับละเอียดพิเศษไข่ดาว',
+          plateColor: '#d97706',
+          rimColor: '#92400e',
+          innerColor: '#fef3c7',
+          baseType: 'rice_kaprao'
+        },
+        thai_tomyum: {
+          name: '🍲 ต้มยำกุ้งน้ำข้นหม้อไฟ (Thailand)',
+          defaultTitle: 'ต้มยำหัวเพื่อนน้ำข้นแซ่บซี้ด',
+          plateColor: '#ea580c',
+          rimColor: '#9a3412',
+          innerColor: '#c2410c',
+          baseType: 'tomyum_soup'
+        },
+        japan_ramen: {
+          name: '🇯🇵 ราเมงทงคตสึข้อสอบ (Japan)',
+          defaultTitle: 'ราเมงชาชูเพื่อนตุ๋น 48 ชั่วโมง',
+          plateColor: '#1c1917',
+          rimColor: '#dc2626',
+          innerColor: '#f59e0b',
+          baseType: 'ramen_bowl'
+        },
+        japan_sushi: {
+          name: '🍣 ซูชิโอมากาเสะคำโต (Japan)',
+          defaultTitle: 'โอมากาเสะหน้าเพื่อนสดเกรดพรีเมียม',
+          plateColor: '#292524',
+          rimColor: '#78716c',
+          innerColor: '#44403c',
+          baseType: 'sushi_board'
+        },
+        italy_pizza: {
+          name: '🇮🇹 พิซซ่าเตาถ่านอิตาเลียน (Italy)',
+          defaultTitle: 'พิซซ่าหน้าเพื่อนดับเบิ้ลชีสขอบกรอบ',
+          plateColor: '#b45309',
+          rimColor: '#78350f',
+          innerColor: '#dc2626',
+          baseType: 'pizza_crust'
+        },
+        usa_burger: {
+          name: '🇺🇸 สเต็กกระทะร้อน & เบอร์เกอร์ (USA)',
+          defaultTitle: 'สเต็กเนื้อเพื่อนวากิวมีเดียมแรร์',
+          plateColor: '#1f2937',
+          rimColor: '#374151',
+          innerColor: '#111827',
+          baseType: 'steak_sizzle'
+        },
+        mexico_taco: {
+          name: '🇲🇽 ทาโก้เม็กซิกันซัลซ่าสด (Mexico)',
+          defaultTitle: 'ทาโก้เพื่อนย่างพริกแม็กซิกัน',
+          plateColor: '#15803d',
+          rimColor: '#166534',
+          innerColor: '#fde047',
+          baseType: 'taco_shell'
+        },
+        korea_bibimbap: {
+          name: '🇰🇷 บิบิมบับข้าวยำหม้อหิน (Korea)',
+          defaultTitle: 'บิบิมบับเพื่อนคลุกซอสโคชูจัง',
+          plateColor: '#27272a',
+          rimColor: '#52525b',
+          innerColor: '#fef08a',
+          baseType: 'bibimbap_bowl'
+        }
+      };
+
+      const SEASONING_INFO = {
+        chili: { emoji: '🌶️', size: 28 },
+        basil: { emoji: '🌿', size: 30 },
+        garlic: { emoji: '🧄', size: 24 },
+        pepper: { emoji: '⚫', size: 10, scatter: 6 },
+        cheese: { emoji: '🧀', size: 32 },
+        egg: { emoji: '🍳', size: 68 },
+        shrimp: { emoji: '🍤', size: 42 },
+        mushroom: { emoji: '🍄', size: 30 },
+        sauce_red: { emoji: '🍅', isSauce: true, color: 'rgba(220, 38, 38, 0.78)' }
+      };
+
+      // Initialize single piece covering full photo
+      function resetToSinglePiece() {
+        const w = maskedCanvas.width || 320;
+        const h = maskedCanvas.height || 320;
+        const scale = Math.min(340 / w, 340 / h);
+        state.pieces = [
+          {
+            poly: [
+              { u: 0, v: 0 },
+              { u: 1, v: 0 },
+              { u: 1, v: 1 },
+              { u: 0, v: 1 }
+            ],
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            rotation: 0,
+            scale: scale,
+            searOffset: 0
+          }
+        ];
+        state.activePieceIndex = 0;
+        updatePieceBadge();
+      }
+
+      function updatePieceBadge() {
+        document.getElementById('pieceCountBadge').textContent = state.pieces.length + ' ชิ้น';
+      }
+
+      // Load user uploaded image
+      function handleFileUpload(file) {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (ev) {
+          const img = new Image();
+          img.onload = function () {
+            const maxDim = 520;
+            let w = img.width;
+            let h = img.height;
+            if (w > maxDim || h > maxDim) {
+              if (w > h) {
+                h = Math.round((h * maxDim) / w);
+                w = maxDim;
+              } else {
+                w = Math.round((w * maxDim) / h);
+                h = maxDim;
+              }
+            }
+            rawCanvas.width = w;
+            rawCanvas.height = h;
+            rawCtx.clearRect(0, 0, w, h);
+            rawCtx.drawImage(img, 0, 0, w, h);
+
+            maskedCanvas.width = w;
+            maskedCanvas.height = h;
+            maskedCtx.clearRect(0, 0, w, h);
+            maskedCtx.drawImage(img, 0, 0, w, h);
+
+            state.hasImage = true;
+            document.getElementById('emptyStateOverlay').classList.add('hidden');
+
+            // Automatically run smart background removal on upload
+            runAutoBackgroundRemoval(state.bgTolerance);
+            resetToSinglePiece();
+            updateStageStatusText();
+          };
+          img.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      // Automatic Background Removal via border flood-fill + color distance feathering
+      function runAutoBackgroundRemoval(tolerancePercent) {
+        if (!state.hasImage) return;
+        const w = rawCanvas.width;
+        const h = rawCanvas.height;
+        const srcData = rawCtx.getImageData(0, 0, w, h);
+        const dstData = maskedCtx.createImageData(w, h);
+        const s = srcData.data;
+        const d = dstData.data;
+
+        for (let i = 0; i < s.length; i++) {
+          d[i] = s[i];
+        }
+
+        // Sample border pixels (corners & edges) to find dominant background colors
+        const borderSamples = [];
+        const sampleCoords = [
+          [2, 2], [w - 3, 2], [2, h - 3], [w - 3, h - 3],
+          [Math.floor(w / 2), 2], [2, Math.floor(h / 2)], [w - 3, Math.floor(h / 2)]
+        ];
+        sampleCoords.forEach(([sx, sy]) => {
+          const idx = (sy * w + sx) * 4;
+          borderSamples.push([s[idx], s[idx + 1], s[idx + 2]]);
+        });
+
+        const maxDist = (tolerancePercent / 100) * 215;
+        const visited = new Uint8Array(w * h);
+        const queue = new Int32Array(w * h);
+        let qHead = 0;
+        let qTail = 0;
+
+        function colorMatchesBg(r, g, b) {
+          for (let i = 0; i < borderSamples.length; i++) {
+            const br = borderSamples[i][0];
+            const bg = borderSamples[i][1];
+            const bb = borderSamples[i][2];
+            const dist = Math.hypot(r - br, g - bg, b - bb);
+            if (dist <= maxDist) return true;
+          }
+          return false;
+        }
+
+        // Seed perimeter pixels
+        for (let x = 0; x < w; x++) {
+          const topIdx = x;
+          const botIdx = (h - 1) * w + x;
+          visited[topIdx] = 1;
+          queue[qTail++] = topIdx;
+          visited[botIdx] = 1;
+          queue[qTail++] = botIdx;
+        }
+        for (let y = 1; y < h - 1; y++) {
+          const leftIdx = y * w;
+          const rightIdx = y * w + (w - 1);
+          visited[leftIdx] = 1;
+          queue[qTail++] = leftIdx;
+          visited[rightIdx] = 1;
+          queue[qTail++] = rightIdx;
+        }
+
+        // Flood fill inward from border
+        while (qHead < qTail) {
+          const curr = queue[qHead++];
+          const pIdx = curr * 4;
+          const r = s[pIdx];
+          const g = s[pIdx + 1];
+          const b = s[pIdx + 2];
+
+          if (colorMatchesBg(r, g, b)) {
+            d[pIdx + 3] = 0; // Make transparent
+            const cx = curr % w;
+            const cy = (curr - cx) / w;
+
+            const neighbors = [];
+            if (cx > 0) neighbors.push(curr - 1);
+            if (cx < w - 1) neighbors.push(curr + 1);
+            if (cy > 0) neighbors.push(curr - w);
+            if (cy < h - 1) neighbors.push(curr + w);
+
+            for (let n = 0; n < neighbors.length; n++) {
+              const nb = neighbors[n];
+              if (!visited[nb]) {
+                visited[nb] = 1;
+                queue[qTail++] = nb;
+              }
+            }
+          }
+        }
+
+        maskedCtx.putImageData(dstData, 0, 0);
+        document.getElementById('bgStatusBadge').textContent = 'ตัดฉากหลังแล้ว ✨';
+      }
+
+      // Magic wand click-to-remove specific color region
+      function magicWandRemoveAt(imgX, imgY) {
+        const w = maskedCanvas.width;
+        const h = maskedCanvas.height;
+        if (imgX < 0 || imgX >= w || imgY < 0 || imgY >= h) return;
+
+        const imgData = maskedCtx.getImageData(0, 0, w, h);
+        const d = imgData.data;
+        const startIdx = (Math.floor(imgY) * w + Math.floor(imgX)) * 4;
+        const tr = d[startIdx];
+        const tg = d[startIdx + 1];
+        const tb = d[startIdx + 2];
+        const maxDist = (state.bgTolerance / 100) * 200;
+
+        for (let i = 0; i < d.length; i += 4) {
+          const dist = Math.hypot(d[i] - tr, d[i + 1] - tg, d[i + 2] - tb);
+          if (dist <= maxDist) {
+            d[i + 3] = 0;
+          }
+        }
+        maskedCtx.putImageData(imgData, 0, 0);
+      }
+
+      // Brush Erase or Restore on maskedCanvas
+      function applyPrepBrush(imgX, imgY) {
+        const radius = state.brushSize;
+        if (state.prepTool === 'erase') {
+          maskedCtx.save();
+          maskedCtx.globalCompositeOperation = 'destination-out';
+          maskedCtx.beginPath();
+          maskedCtx.arc(imgX, imgY, radius, 0, Math.PI * 2);
+          maskedCtx.fill();
+          maskedCtx.restore();
+        } else if (state.prepTool === 'restore') {
+          maskedCtx.save();
+          maskedCtx.beginPath();
+          maskedCtx.arc(imgX, imgY, radius, 0, Math.PI * 2);
+          maskedCtx.clip();
+          maskedCtx.drawImage(rawCanvas, 0, 0);
+          maskedCtx.restore();
+        }
+      }
+
+      // Convert canvas (x,y) to piece-local normalized (u,v)
+      function canvasPointToPieceUV(px, py, piece) {
+        const w = maskedCanvas.width;
+        const h = maskedCanvas.height;
+        const dx = px - piece.x;
+        const dy = py - piece.y;
+        const cos = Math.cos(-piece.rotation);
+        const sin = Math.sin(-piece.rotation);
+        const lx = (dx * cos - dy * sin) / piece.scale;
+        const ly = (dx * sin + dy * cos) / piece.scale;
+        return {
+          u: lx / w + 0.5,
+          v: ly / h + 0.5
+        };
+      }
+
+      // Convert piece-local (u,v) back to canvas (x,y)
+      function pieceUVToCanvasPoint(u, v, piece) {
+        const w = maskedCanvas.width;
+        const h = maskedCanvas.height;
+        const lx = (u - 0.5) * w * piece.scale;
+        const ly = (v - 0.5) * h * piece.scale;
+        const cos = Math.cos(piece.rotation);
+        const sin = Math.sin(piece.rotation);
+        return {
+          x: piece.x + (lx * cos - ly * sin),
+          y: piece.y + (lx * sin + ly * cos)
+        };
+      }
+
+      // Point in polygon check (in UV space)
+      function pointInPolyUV(u, v, poly) {
+        let inside = false;
+        for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+          const xi = poly[i].u, yi = poly[i].v;
+          const xj = poly[j].u, yj = poly[j].v;
+          const intersect = ((yi > v) !== (yj > v)) &&
+            (u < ((xj - xi) * (v - yi)) / (yj - yi + 1e-9) + xi);
+          if (intersect) inside = !inside;
+        }
+        return inside;
+      }
+
+      // Sutherland-Hodgman style polygon split by a line from A(x1,y1) to B(x2,y2) in canvas space
+      function splitPolygonsByLine(x1, y1, x2, y2) {
+        if (Math.hypot(x2 - x1, y2 - y1) < 18) return;
+
+        const nextPieces = [];
+        let splitCount = 0;
+
+        state.pieces.forEach((piece) => {
+          const a = canvasPointToPieceUV(x1, y1, piece);
+          const b = canvasPointToPieceUV(x2, y2, piece);
+
+          // Check if segment A-B actually crosses the polygon
+          const poly = piece.poly;
+          const leftPoly = [];
+          const rightPoly = [];
+
+          function sideOfLine(p) {
+            return (b.u - a.u) * (p.v - a.v) - (b.v - a.v) * (p.u - a.u);
+          }
+
+          //Also verify segment bounds intersect polygon bounding box
+          let minU = 1, maxU = 0, minV = 1, maxV = 0;
+          poly.forEach((pt) => {
+            if (pt.u < minU) minU = pt.u;
+            if (pt.u > maxU) maxU = pt.u;
+            if (pt.v < minV) minV = pt.v;
+            if (pt.v > maxV) maxV = pt.v;
+          });
+
+          const segMinU = Math.min(a.u, b.u);
+          const segMaxU = Math.max(a.u, b.u);
+          const segMinV = Math.min(a.v, b.v);
+          const segMaxV = Math.max(a.v, b.v);
+
+          if (segMaxU < minU || segMinU > maxU || segMaxV < minV || segMinV > maxV) {
+            nextPieces.push(piece);
+            return;
+          }
+
+          for (let i = 0; i < poly.length; i++) {
+            const curr = poly[i];
+            const next = poly[(i + 1) % poly.length];
+            const sCurr = sideOfLine(curr);
+            const sNext = sideOfLine(next);
+
+            if (sCurr >= 0) leftPoly.push(curr);
+            if (sCurr <= 0) rightPoly.push(curr);
+
+            if ((sCurr > 0 && sNext < 0) || (sCurr < 0 && sNext > 0)) {
+              const t = sCurr / (sCurr - sNext);
+              const inter = {
+                u: curr.u + t * (next.u - curr.u),
+                v: curr.v + t * (next.v - curr.v)
+              };
+              leftPoly.push(inter);
+              rightPoly.push(inter);
+            }
+          }
+
+          if (leftPoly.length >= 3 && rightPoly.length >= 3) {
+            splitCount++;
+            // Push the two halves slightly apart perpendicular to the cut line in canvas space
+            const angle = Math.atan2(y2 - y1, x2 - x1);
+            const sep = 9;
+            const nx = -Math.sin(angle) * sep;
+            const ny = Math.cos(angle) * sep;
+
+            nextPieces.push({
+              poly: leftPoly,
+              x: piece.x + nx,
+              y: piece.y + ny,
+              rotation: piece.rotation - 0.03,
+              scale: piece.scale,
+              searOffset: piece.searOffset
+            });
+            nextPieces.push({
+              poly: rightPoly,
+              x: piece.x - nx,
+              y: piece.y - ny,
+              rotation: piece.rotation + 0.03,
+              scale: piece.scale,
+              searOffset: piece.searOffset
+            });
+          } else {
+            nextPieces.push(piece);
+          }
+        });
+
+        if (splitCount > 0) {
+          state.pieces = nextPieces;
+          updatePieceBadge();
+          // Spawn chop visual particles along the cut
+          const midX = (x1 + x2) / 2;
+          const midY = (y1 + y2) / 2;
+          for (let i = 0; i < 10; i++) {
+            state.particles.push({
+              x: midX + (Math.random() - 0.5) * 40,
+              y: midY + (Math.random() - 0.5) * 40,
+              vx: (Math.random() - 0.5) * 4,
+              vy: (Math.random() - 0.5) * 4 - 1,
+              size: 4 + Math.random() * 4,
+              alpha: 1,
+              color: '#fef08a'
+            });
+          }
+        }
+      }
+
+      // Draw background environment depending on active station
+      function drawStationBackground() {
+        const w = canvas.width;
+        const h = canvas.height;
+
+        if (state.station === 'prep') {
+          // Clean kitchen prep counter with transparency checkerboard inside frame
+          ctx.fillStyle = '#362922';
+          ctx.fillRect(0, 0, w, h);
+
+          const tileSize = 20;
+          const pad = 40;
+          for (let y = pad; y < h - pad; y += tileSize) {
+            for (let x = pad; x < w - pad; x += tileSize) {
+              const isEven = ((Math.floor(x / tileSize) + Math.floor(y / tileSize)) % 2) === 0;
+              ctx.fillStyle = isEven ? '#ffffff' : '#e5e7eb';
+              ctx.fillRect(x, y, Math.min(tileSize, w - pad - x), Math.min(tileSize, h - pad - y));
+            }
+          }
+          ctx.strokeStyle = '#d97706';
+          ctx.lineWidth = 4;
+          ctx.strokeRect(pad, pad, w - pad * 2, h - pad * 2);
+
+        } else if (state.station === 'slice') {
+          // Wooden Butcher Cutting Board
+          ctx.fillStyle = '#432818';
+          ctx.fillRect(0, 0, w, h);
+
+          const bx = 46, by = 36, bw = w - 92, bh = h - 72;
+          const grad = ctx.createLinearGradient(bx, by, bx, by + bh);
+          grad.addColorStop(0, '#deb887');
+          grad.addColorStop(0.5, '#d2a679');
+          grad.addColorStop(1, '#c69363');
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          ctx.roundRect(bx, by, bw, bh, 26);
+          ctx.fill();
+          ctx.lineWidth = 6;
+          ctx.strokeStyle = '#8b5a2b';
+          ctx.stroke();
+
+          // Subtle wood grain stripes
+          ctx.strokeStyle = 'rgba(139, 90, 43, 0.16)';
+          ctx.lineWidth = 2;
+          for (let y = by + 28; y < by + bh - 20; y += 26) {
+            ctx.beginPath();
+            ctx.moveTo(bx + 20, y);
+            ctx.lineTo(bx + bw - 20, y);
+            ctx.stroke();
+          }
+
+        } else if (state.station === 'cook') {
+          // Stove & Heavy Cast-Iron Pan / Boiling Pot / Grill
+          ctx.fillStyle = '#1c1917';
+          ctx.fillRect(0, 0, w, h);
+
+          const cx = w / 2;
+          const cy = h / 2;
+          const panRadius = 265;
+
+          // Outer stove flame glow based on heatLevel
+          if (state.heatLevel > 5) {
+            const glowGrad = ctx.createRadialGradient(cx, cy, panRadius - 20, cx, cy, panRadius + 48);
+            glowGrad.addColorStop(0, 'rgba(249, 115, 22, 0.6)');
+            glowGrad.addColorStop(1, 'rgba(239, 68, 68, 0)');
+            ctx.fillStyle = glowGrad;
+            ctx.beginPath();
+            ctx.arc(cx, cy, panRadius + 48, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          // Pan body
+          ctx.fillStyle = '#27272a';
+          ctx.beginPath();
+          ctx.arc(cx, cy, panRadius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.lineWidth = 12;
+          ctx.strokeStyle = '#3f3f46';
+          ctx.stroke();
+
+          // Inner cooking surface by cookMode
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(cx, cy, panRadius - 14, 0, Math.PI * 2);
+          ctx.clip();
+
+          if (state.cookMode === 'fry') {
+            ctx.fillStyle = '#18181b';
+            ctx.fillRect(cx - panRadius, cy - panRadius, panRadius * 2, panRadius * 2);
+            // Hot oil shimmer
+            ctx.fillStyle = 'rgba(250, 204, 21, 0.14)';
+            ctx.beginPath();
+            ctx.arc(cx, cy, panRadius - 45, 0, Math.PI * 2);
+            ctx.fill();
+          } else if (state.cookMode === 'boil') {
+            const soupGrad = ctx.createRadialGradient(cx, cy, 30, cx, cy, panRadius);
+            soupGrad.addColorStop(0, '#f97316');
+            soupGrad.addColorStop(1, '#b91c1c');
+            ctx.fillStyle = soupGrad;
+            ctx.fillRect(cx - panRadius, cy - panRadius, panRadius * 2, panRadius * 2);
+          } else if (state.cookMode === 'grill') {
+            ctx.fillStyle = '#29150c';
+            ctx.fillRect(cx - panRadius, cy - panRadius, panRadius * 2, panRadius * 2);
+            ctx.strokeStyle = '#09090b';
+            ctx.lineWidth = 10;
+            for (let x = cx - panRadius; x <= cx + panRadius; x += 34) {
+              ctx.beginPath();
+              ctx.moveTo(x, cy - panRadius);
+              ctx.lineTo(x, cy + panRadius);
+              ctx.stroke();
+            }
+          }
+          ctx.restore();
+
+        } else if (state.station === 'plate') {
+          drawWorldDishBackground();
+        }
+      }
+
+      function drawWorldDishBackground() {
+        const w = canvas.width;
+        const h = canvas.height;
+        const dish = WORLD_DISHES[state.selectedDish] || WORLD_DISHES.thai_kaprao;
+
+        // Restaurant tablecloth background
+        ctx.fillStyle = '#451a03';
+        ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+        for (let x = 0; x < w; x += 40) {
+          ctx.fillRect(x, 0, 20, h);
+        }
+
+        const cx = w / 2;
+        const cy = h / 2 - 12;
+        const outerR = 255;
+
+        // Plate shadow
+        ctx.fillStyle = 'rgba(0,0,0,0.45)';
+        ctx.beginPath();
+        ctx.arc(cx + 8, cy + 12, outerR, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Outer plate rim
+        ctx.fillStyle = dish.plateColor;
+        ctx.beginPath();
+        ctx.arc(cx, cy, outerR, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.lineWidth = 8;
+        ctx.strokeStyle = dish.rimColor;
+        ctx.stroke();
+
+        // Inner plate well
+        ctx.fillStyle = dish.innerColor;
+        ctx.beginPath();
+        ctx.arc(cx, cy, outerR - 34, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Authentic visual base for each world dish
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx, cy, outerR - 36, 0, Math.PI * 2);
+        ctx.clip();
+
+        if (dish.baseType === 'rice_kaprao') {
+          // Banana leaf under steamed jasmine rice
+          ctx.fillStyle = '#15803d';
+          ctx.beginPath();
+          ctx.arc(cx, cy, outerR - 42, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#fffbeb';
+          ctx.beginPath();
+          ctx.arc(cx - 25, cy + 10, 145, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (dish.baseType === 'tomyum_soup') {
+          const g = ctx.createRadialGradient(cx, cy, 20, cx, cy, outerR - 36);
+          g.addColorStop(0, '#fb923c');
+          g.addColorStop(1, '#9a3412');
+          ctx.fillStyle = g;
+          ctx.fillRect(cx - outerR, cy - outerR, outerR * 2, outerR * 2);
+        } else if (dish.baseType === 'ramen_bowl') {
+          // Wavy ramen noodles in rich tonkotsu broth
+          ctx.strokeStyle = '#fde047';
+          ctx.lineWidth = 6;
+          for (let y = cy - 130; y <= cy + 130; y += 16) {
+            ctx.beginPath();
+            for (let x = cx - 140; x <= cx + 140; x += 20) {
+              ctx.lineTo(x, y + Math.sin(x * 0.08) * 6);
+            }
+            ctx.stroke();
+          }
+        } else if (dish.baseType === 'sushi_board') {
+          // Wooden geta board & shari rice pillows
+          ctx.fillStyle = '#d6a87c';
+          ctx.fillRect(cx - 180, cy - 110, 360, 220);
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath();
+          ctx.roundRect(cx - 120, cy - 45, 105, 90, 24);
+          ctx.roundRect(cx + 15, cy - 45, 105, 90, 24);
+          ctx.fill();
+        } else if (dish.baseType === 'pizza_crust') {
+          // Melted mozzarella & tomato base
+          ctx.fillStyle = '#fde68a';
+          ctx.beginPath();
+          ctx.arc(cx, cy, outerR - 54, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (dish.baseType === 'taco_shell') {
+          ctx.fillStyle = '#facc15';
+          ctx.beginPath();
+          ctx.ellipse(cx, cy, 185, 125, -0.15, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+
+        // Dish Menu Banner at bottom of canvas
+        const bannerText = (state.dishTitle || dish.defaultTitle).trim();
+        ctx.save();
+        ctx.fillStyle = 'rgba(28, 19, 13, 0.88)';
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 3;
+        const bw = Math.min(w - 80, Math.max(320, bannerText.length * 16 + 70));
+        const bx = (w - bw) / 2;
+        const by = h - 68;
+        ctx.beginPath();
+        ctx.roundRect(bx, by, bw, 50, 999);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#fef3c7';
+        ctx.font = '600 21px "Kanit", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('🍽️ ' + bannerText, w / 2, by + 26);
+        ctx.restore();
+      }
+
+      // Draw all sliced polygonal pieces of the friend's image
+      function drawFoodPieces() {
+        if (!state.hasImage) return;
+        const w = maskedCanvas.width;
+        const h = maskedCanvas.height;
+
+        state.pieces.forEach((piece, idx) => {
+          ctx.save();
+          ctx.translate(piece.x, piece.y);
+          ctx.rotate(piece.rotation);
+          ctx.scale(piece.scale, piece.scale);
+
+          // Build clipping path from piece.poly
+          ctx.beginPath();
+          piece.poly.forEach((pt, i) => {
+            const px = (pt.u - 0.5) * w;
+            const py = (pt.v - 0.5) * h;
+            if (i === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+          });
+          ctx.closePath();
+
+          // Drop shadow for depth
+          ctx.save();
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.38)';
+          ctx.shadowBlur = 12;
+          ctx.shadowOffsetX = 4;
+          ctx.shadowOffsetY = 6;
+          ctx.clip();
+
+          // Apply cooking doneness visual filter
+          if (state.doneness > 0) {
+            const d = state.doneness;
+            const sepia = Math.min(85, Math.round(d * 0.85));
+            const saturate = Math.round(100 + d * 0.9);
+            const brightness = Math.max(52, Math.round(104 - d * 0.48));
+            const contrast = Math.round(100 + d * 0.35);
+            ctx.filter = `sepia(${sepia}%) saturate(${saturate}%) brightness(${brightness}%) contrast(${contrast}%)`;
+          }
+
+          ctx.drawImage(maskedCanvas, -w / 2, -h / 2);
+          ctx.filter = 'none';
+
+          // If grilled and cooked, overlay char grill marks inside clip
+          if (state.cookMode === 'grill' && state.doneness > 25) {
+            const charAlpha = Math.min(0.68, (state.doneness - 25) / 100);
+            ctx.strokeStyle = `rgba(28, 15, 8, ${charAlpha})`;
+            ctx.lineWidth = 7;
+            for (let gx = -w / 2; gx <= w / 2; gx += 32) {
+              ctx.beginPath();
+              ctx.moveTo(gx - 20, -h / 2);
+              ctx.lineTo(gx + 20, h / 2);
+              ctx.stroke();
+            }
+          }
+          ctx.restore();
+
+          // Highlight active piece outline when moving/plating
+          if (
+            (state.station === 'slice' && state.sliceTool === 'hand' && idx === state.activePieceIndex) ||
+            (state.station === 'plate' && idx === state.activePieceIndex)
+          ) {
+            ctx.strokeStyle = 'rgba(245, 158, 11, 0.85)';
+            ctx.lineWidth = 2.5 / piece.scale;
+            ctx.setLineDash([6 / piece.scale, 4 / piece.scale]);
+            ctx.stroke();
+          }
+
+          ctx.restore();
+        });
+      }
+
+      // Draw seasonings & toppings
+      function drawToppings() {
+        state.toppings.forEach((t) => {
+          ctx.save();
+          ctx.translate(t.x, t.y);
+          ctx.rotate(t.rot || 0);
+          if (t.isSauce) {
+            ctx.fillStyle = t.color;
+            ctx.beginPath();
+            ctx.arc(0, 0, t.size, 0, Math.PI * 2);
+            ctx.fill();
+          } else {
+            ctx.font = `${t.size}px sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(t.emoji, 0, 0);
+          }
+          ctx.restore();
+        });
+      }
+
+      // Update & draw cooking animation loop
+      function tickSimulation() {
+        // Progress cooking doneness when on 'cook' station and heat > 0
+        if (state.hasImage && state.station === 'cook' && state.heatLevel > 0) {
+          const rate = (state.heatLevel / 100) * 0.14;
+          state.doneness = Math.min(100, state.doneness + rate);
+          updateCookDonenessBadge();
+
+          // Spawn sizzle / steam / bubble particles
+          if (Math.random() < (state.heatLevel / 100) * 0.65) {
+            const cx = canvas.width / 2 + (Math.random() - 0.5) * 280;
+            const cy = canvas.height / 2 + (Math.random() - 0.5) * 280;
+            state.particles.push({
+              x: cx,
+              y: cy,
+              vx: (Math.random() - 0.5) * 1.2,
+              vy: -1 - Math.random() * 2.2,
+              size: state.cookMode === 'boil' ? 8 + Math.random() * 10 : 4 + Math.random() * 6,
+              alpha: 0.85,
+              color: state.cookMode === 'boil' ? 'rgba(254, 243, 199, 0.75)' : 'rgba(255, 255, 255, 0.65)'
+            });
+          }
+        }
+
+        // Render frame
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawStationBackground();
+        drawFoodPieces();
+        drawToppings();
+
+        // Active knife cut line preview
+        if (state.station === 'slice' && state.isDrawingSlice && state.sliceStart && state.sliceEnd) {
+          ctx.save();
+          ctx.strokeStyle = '#ef4444';
+          ctx.lineWidth = 4;
+          ctx.setLineDash([10, 6]);
+          ctx.beginPath();
+          ctx.moveTo(state.sliceStart.x, state.sliceStart.y);
+          ctx.lineTo(state.sliceEnd.x, state.sliceEnd.y);
+          ctx.stroke();
+
+          ctx.font = '28px sans-serif';
+          ctx.fillText('🔪', state.sliceEnd.x - 10, state.sliceEnd.y - 10);
+          ctx.restore();
+        }
+
+        // Update particles
+        for (let i = state.particles.length - 1; i >= 0; i--) {
+          const p = state.particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.alpha -= 0.022;
+          if (p.alpha <= 0) {
+            state.particles.splice(i, 1);
+          } else {
+            ctx.save();
+            ctx.globalAlpha = Math.max(0, p.alpha);
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+          }
+        }
+
+        requestAnimationFrame(tickSimulation);
+      }
+
+      function updateCookDonenessBadge() {
+        const d = Math.round(state.doneness);
+        let label = 'ดิบสด (' + d + '%)';
+        if (d >= 20 && d < 50) label = 'เริ่มสุกหอม (' + d + '%)';
+        else if (d >= 50 && d < 80) label = 'สุกเหลืองทองกำลังดี (' + d + '%)';
+        else if (d >= 80) label = 'เกรียมกรอบไฟลุก (' + d + '%)';
+        document.getElementById('cookDonenessBadge').textContent = label;
+      }
+
+      // Pointer coordinates helper
+      function getCanvasCoords(ev) {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const clientX = ev.touches ? ev.touches[0].clientX : ev.clientX;
+        const clientY = ev.touches ? ev.touches[0].clientY : ev.clientY;
+        return {
+          x: (clientX - rect.left) * scaleX,
+          y: (clientY - rect.top) * scaleY
+        };
+      }
+
+      // Find topmost piece under cursor
+      function findPieceAt(x, y) {
+        for (let i = state.pieces.length - 1; i >= 0; i--) {
+          const piece = state.pieces[i];
+          const uv = canvasPointToPieceUV(x, y, piece);
+          if (pointInPolyUV(uv.u, uv.v, piece.poly)) {
+            return i;
+          }
+        }
+        return -1;
+      }
+
+      // Drop seasoning/topping at (x,y)
+      function addToppingAt(x, y) {
+        const info = SEASONING_INFO[state.selectedSeasoning];
+        if (!info) return;
+        if (info.isSauce) {
+          for (let i = 0; i < 4; i++) {
+            state.toppings.push({
+              x: x + (Math.random() - 0.5) * 22,
+              y: y + (Math.random() - 0.5) * 22,
+              size: 10 + Math.random() * 8,
+              isSauce: true,
+              color: info.color
+            });
+          }
+        } else if (info.scatter) {
+          for (let i = 0; i < info.scatter; i++) {
+            state.toppings.push({
+              x: x + (Math.random() - 0.5) * 55,
+              y: y + (Math.random() - 0.5) * 55,
+              emoji: info.emoji,
+              size: info.size,
+              rot: (Math.random() - 0.5) * 3
+            });
+          }
+        } else {
+          state.toppings.push({
+            x: x,
+            y: y,
+            emoji: info.emoji,
+            size: info.size,
+            rot: (Math.random() - 0.5) * 0.8
+          });
+        }
+      }
+
+      // Pointer Down on Canvas
+      canvas.addEventListener('pointerdown', function (ev) {
+        if (!state.hasImage) return;
+        const pt = getCanvasCoords(ev);
+
+        if (state.station === 'prep') {
+          const piece = state.pieces[0];
+          const uv = canvasPointToPieceUV(pt.x, pt.y, piece);
+          const imgX = uv.u * maskedCanvas.width;
+          const imgY = uv.v * maskedCanvas.height;
+          if (state.prepTool === 'wand') {
+            magicWandRemoveAt(imgX, imgY);
+          } else {
+            state.isBrushing = true;
+            applyPrepBrush(imgX, imgY);
+          }
+        } else if (state.station === 'slice') {
+          if (state.sliceTool === 'knife') {
+            state.isDrawingSlice = true;
+            state.sliceStart = pt;
+            state.sliceEnd = pt;
+          } else {
+            const hit = findPieceAt(pt.x, pt.y);
+            if (hit !== -1) {
+              state.activePieceIndex = hit;
+              state.draggingPiece = true;
+              state.dragOffsetX = pt.x - state.pieces[hit].x;
+              state.dragOffsetY = pt.y - state.pieces[hit].y;
+            }
+          }
+        } else if (state.station === 'cook') {
+          const hit = findPieceAt(pt.x, pt.y);
+          if (hit !== -1 && ev.shiftKey) {
+            state.activePieceIndex = hit;
+            state.draggingPiece = true;
+            state.dragOffsetX = pt.x - state.pieces[hit].x;
+            state.dragOffsetY = pt.y - state.pieces[hit].y;
+          } else {
+            addToppingAt(pt.x, pt.y);
+          }
+        } else if (state.station === 'plate') {
+          const hit = findPieceAt(pt.x, pt.y);
+          if (hit !== -1) {
+            state.activePieceIndex = hit;
+            state.draggingPiece = true;
+            state.dragOffsetX = pt.x - state.pieces[hit].x;
+            state.dragOffsetY = pt.y - state.pieces[hit].y;
+          } else {
+            addToppingAt(pt.x, pt.y);
+          }
+        }
+      });
+
+      canvas.addEventListener('pointermove', function (ev) {
+        if (!state.hasImage) return;
+        const pt = getCanvasCoords(ev);
+
+        if (state.station === 'prep' && state.isBrushing) {
+          const piece = state.pieces[0];
+          const uv = canvasPointToPieceUV(pt.x, pt.y, piece);
+          applyPrepBrush(uv.u * maskedCanvas.width, uv.v * maskedCanvas.height);
+        } else if (state.station === 'slice' && state.isDrawingSlice) {
+          state.sliceEnd = pt;
+        } else if (state.draggingPiece && state.activePieceIndex !== -1) {
+          const p = state.pieces[state.activePieceIndex];
+          p.x = pt.x - state.dragOffsetX;
+          p.y = pt.y - state.dragOffsetY;
+        }
+      });
+
+      window.addEventListener('pointerup', function () {
+        if (state.station === 'slice' && state.isDrawingSlice && state.sliceStart && state.sliceEnd) {
+          splitPolygonsByLine(
+            state.sliceStart.x,
+            state.sliceStart.y,
+            state.sliceEnd.x,
+            state.sliceEnd.y
+          );
+        }
+        state.isDrawingSlice = false;
+        state.sliceStart = null;
+        state.sliceEnd = null;
+        state.draggingPiece = false;
+        state.isBrushing = false;
+      });
+
+      // Switch Cooking Station
+      function switchStation(stationName) {
+        state.station = stationName;
+        document.querySelectorAll('.station-tab').forEach((btn) => {
+          btn.classList.toggle('active', btn.dataset.station === stationName);
+        });
+        document.querySelectorAll('.control-section').forEach((sec) => {
+          sec.classList.toggle('active', sec.id === 'panel-' + stationName);
+        });
+        updateStageStatusText();
+      }
+
+      function updateStageStatusText() {
+        const el = document.getElementById('stageStatusText');
+        if (state.station === 'prep') {
+          el.textContent = '🪄 ขั้นตอนที่ 1: ปรับแถบลบพื้นหลังอัตโนมัติ หรือคลิกจิ้มสีพื้นหลังบนรูปเพื่อตัดออก';
+        } else if (state.station === 'slice') {
+          el.textContent = state.sliceTool === 'knife'
+            ? '🔪 ขั้นตอนที่ 2: ลากเส้นมีดผ่านรูปเพื่อนเพื่อหั่นแยกเป็นชิ้นๆ ได้อิสระ!'
+            : '🤚 ขั้นตอนที่ 2: คลิกหยิบชิ้นเนื้อเพื่อนเพื่อจัดวางแยกตำแหน่ง';
+        } else if (state.station === 'cook') {
+          el.textContent = '🍳 ขั้นตอนที่ 3: เร่งไฟให้สุกเหลือง คลิกบนกระทะเพื่อโรยเครื่องเทศและซอสได้อิสระ';
+        } else if (state.station === 'plate') {
+          el.textContent = '🍽️ ขั้นตอนที่ 4: ลากจัดเรียงชิ้นเนื้อเพื่อนลงบนจานเมนูทั่วโลก แล้วกดเซฟรูปหรือโหลด ZIP';
+        }
+      }
+
+      // Pure JS CRC32 and Uncompressed ZIP Builder (100% self-contained, zero external dependencies)
+      const crcTable = (function () {
+        const table = new Uint32Array(256);
+        for (let n = 0; n < 256; n++) {
+          let c = n;
+          for (let k = 0; k < 8; k++) {
+            c = (c & 1) ? (0xedb88320 ^ (c >>> 1)) : (c >>> 1);
+          }
+          table[n] = c >>> 0;
+        }
+        return table;
+      })();
+
+      function crc32(bytes) {
+        let crc = 0xffffffff;
+        for (let i = 0; i < bytes.length; i++) {
+          crc = (crc >>> 8) ^ crcTable[(crc ^ bytes[i]) & 0xff];
+        }
+        return (crc ^ 0xffffffff) >>> 0;
+      }
+
+      function dataURLToUint8Array(dataURL) {
+        const base64 = dataURL.split(',')[1];
+        const bin = atob(base64);
+        const out = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) {
+          out[i] = bin.charCodeAt(i);
+        }
+        return out;
+      }
+
+      function stringToUint8Array(str) {
+        return new TextEncoder().encode(str);
+      }
+
+      function buildZipBlob(files) {
+        // files: Array of { name: string, data: Uint8Array }
+        const localHeaders = [];
+        const centralHeaders = [];
+        let offset = 0;
+
+        files.forEach((f) => {
+          const nameBytes = stringToUint8Array(f.name);
+          const dataBytes = f.data;
+          const crc = crc32(dataBytes);
+          const size = dataBytes.length;
+
+          // Local file header (30 bytes + name)
+          const lh = new Uint8Array(30 + nameBytes.length);
+          const lhv = new DataView(lh.buffer);
+          lhv.setUint32(0, 0x04034b50, true); // signature
+          lhv.setUint16(4, 20, true); // version needed
+          lhv.setUint16(6, 0x0800, true); // UTF-8 flag
+          lhv.setUint16(8, 0, true); // store (no compression)
+          lhv.setUint16(10, 0, true); // mod time
+          lhv.setUint16(12, 0, true); // mod date
+          lhv.setUint32(14, crc, true);
+          lhv.setUint32(18, size, true);
+          lhv.setUint32(22, size, true);
+          lhv.setUint16(26, nameBytes.length, true);
+          lhv.setUint16(28, 0, true);
+          lh.set(nameBytes, 30);
+
+          localHeaders.push(lh, dataBytes);
+
+          // Central directory header (46 bytes + name)
+          const ch = new Uint8Array(46 + nameBytes.length);
+          const chv = new DataView(ch.buffer);
+          chv.setUint32(0, 0x02014b50, true);
+          chv.setUint16(4, 20, true);
+          chv.setUint16(6, 20, true);
+          chv.setUint16(8, 0x0800, true);
+          chv.setUint16(10, 0, true);
+          chv.setUint16(12, 0, true);
+          chv.setUint16(14, 0, true);
+          chv.setUint32(16, crc, true);
+          chv.setUint32(20, size, true);
+          chv.setUint32(24, size, true);
+          chv.setUint16(28, nameBytes.length, true);
+          chv.setUint16(30, 0, true);
+          chv.setUint16(32, 0, true);
+          chv.setUint16(34, 0, true);
+          chv.setUint16(36, 0, true);
+          chv.setUint32(38, 0, true);
+          chv.setUint32(42, offset, true);
+          ch.set(nameBytes, 46);
+
+          centralHeaders.push(ch);
+          offset += lh.length + size;
+        });
+
+        let centralSize = 0;
+        centralHeaders.forEach((c) => { centralSize += c.length; });
+
+        const eocd = new Uint8Array(22);
+        const eocdv = new DataView(eocd.buffer);
+        eocdv.setUint32(0, 0x06054b50, true);
+        eocdv.setUint16(4, 0, true);
+        eocdv.setUint16(6, 0, true);
+        eocdv.setUint16(8, files.length, true);
+        eocdv.setUint16(10, files.length, true);
+        eocdv.setUint32(12, centralSize, true);
+        eocdv.setUint32(16, offset, true);
+        eocdv.setUint16(20, 0, true);
+
+        return new Blob([...localHeaders, ...centralHeaders, eocd], { type: 'application/zip' });
+      }
+
+      // Open Export Modal with fresh PNG & ZIP links
+      function openExportModal() {
+        // Ensure we render in plate mode if user clicks export
+        const pngDataUrl = canvas.toDataURL('image/png');
+        const cutoutDataUrl = maskedCanvas.toDataURL('image/png');
+
+        document.getElementById('exportPreviewImage').src = pngDataUrl;
+        const pngLink = document.getElementById('modalDownloadPngLink');
+        pngLink.href = pngDataUrl;
+
+        const dishInfo = WORLD_DISHES[state.selectedDish] || WORLD_DISHES.thai_kaprao;
+        const recipeJson = JSON.stringify({
+          menuTitle: state.dishTitle,
+          worldCuisine: dishInfo.name,
+          piecesSliced: state.pieces.length,
+          donenessPercent: Math.round(state.doneness),
+          cookingMethod: state.cookMode,
+          toppingsCount: state.toppings.length,
+          createdAt: new Date().toISOString()
+        }, null, 2);
+
+        const zipBlob = buildZipBlob([
+          { name: 'finished-dish.png', data: dataURLToUint8Array(pngDataUrl) },
+          { name: 'friend-cutout-ingredient.png', data: dataURLToUint8Array(cutoutDataUrl) },
+          { name: 'recipe-card.json', data: stringToUint8Array(recipeJson) }
+        ]);
+        const zipUrl = URL.createObjectURL(zipBlob);
+        const zipLink = document.getElementById('modalDownloadZipLink');
+        zipLink.href = zipUrl;
+
+        document.getElementById('exportModal').classList.add('open');
+        return { pngLink, zipLink };
+      }
+
+      // Wire UI Events
+      ['mainFileInput', 'quickUploadInput', 'emptyUploadInput'].forEach((id) => {
+        document.getElementById(id).addEventListener('change', function (e) {
+          if (e.target.files && e.target.files[0]) {
+            handleFileUpload(e.target.files[0]);
+          }
+        });
+      });
+
+      document.querySelectorAll('.station-tab').forEach((tab) => {
+        tab.addEventListener('click', () => switchStation(tab.dataset.station));
+      });
+
+      document.getElementById('goToSliceBtn').addEventListener('click', () => switchStation('slice'));
+      document.getElementById('goToCookBtn').addEventListener('click', () => switchStation('cook'));
+      document.getElementById('goToPlateBtn').addEventListener('click', () => switchStation('plate'));
+
+      // Station 1 controls
+      const bgSlider = document.getElementById('bgToleranceSlider');
+      bgSlider.addEventListener('input', function () {
+        state.bgTolerance = Number(this.value);
+        document.getElementById('toleranceValueLabel').textContent = state.bgTolerance + '%';
+        runAutoBackgroundRemoval(state.bgTolerance);
+      });
+
+      document.getElementById('runAutoBgBtn').addEventListener('click', function () {
+        runAutoBackgroundRemoval(state.bgTolerance);
+      });
+
+      document.getElementById('restoreOriginalBgBtn').addEventListener('click', function () {
+        if (!state.hasImage) return;
+        maskedCtx.clearRect(0, 0, maskedCanvas.width, maskedCanvas.height);
+        maskedCtx.drawImage(rawCanvas, 0, 0);
+        document.getElementById('bgStatusBadge').textContent = 'รูปต้นฉบับ';
+      });
+
+      document.querySelectorAll('[data-prep-tool]').forEach((btn) => {
+        btn.addEventListener('click', function () {
+          state.prepTool = this.dataset.prepTool;
+          document.querySelectorAll('[data-prep-tool]').forEach((b) => b.classList.remove('active-tool'));
+          this.classList.add('active-tool');
+        });
+      });
+
+      document.getElementById('brushSizeSlider').addEventListener('input', function () {
+        state.brushSize = Number(this.value);
+        document.getElementById('brushSizeLabel').textContent = state.brushSize + ' px';
+      });
+
+      // Station 2 controls
+      document.getElementById('toolKnifeBtn').addEventListener('click', function () {
+        state.sliceTool = 'knife';
+        this.classList.add('active-tool');
+        document.getElementById('toolHandBtn').classList.remove('active-tool');
+        updateStageStatusText();
+      });
+
+      document.getElementById('toolHandBtn').addEventListener('click', function () {
+        state.sliceTool = 'hand';
+        this.classList.add('active-tool');
+        document.getElementById('toolKnifeBtn').classList.remove('active-tool');
+        updateStageStatusText();
+      });
+
+      document.getElementById('quickSliceStripsBtn').addEventListener('click', function () {
+        const cy = canvas.height / 2;
+        [-75, -25, 25, 75].forEach((offsetX) => {
+          splitPolygonsByLine(canvas.width / 2 + offsetX, cy - 220, canvas.width / 2 + offsetX, cy + 220);
+        });
+      });
+
+      document.getElementById('quickDiceBtn').addEventListener('click', function () {
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2;
+        [-55, 0, 55].forEach((ox) => {
+          splitPolygonsByLine(cx + ox, cy - 220, cx + ox, cy + 220);
+        });
+        [-55, 0, 55].forEach((oy) => {
+          splitPolygonsByLine(cx - 220, cy + oy, cx + 220, cy + oy);
+        });
+      });
+
+      document.getElementById('resetSlicesBtn').addEventListener('click', resetToSinglePiece);
+
+      document.getElementById('scatterPiecesBtn').addEventListener('click', function () {
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2;
+        state.pieces.forEach((p) => {
+          p.x = cx + (Math.random() - 0.5) * 210;
+          p.y = cy + (Math.random() - 0.5) * 160;
+          p.rotation = (Math.random() - 0.5) * 0.9;
+        });
+      });
+
+      // Station 3 controls
+      document.querySelectorAll('[data-cook-mode]').forEach((btn) => {
+        btn.addEventListener('click', function () {
+          state.cookMode = this.dataset.cookMode;
+          document.querySelectorAll('[data-cook-mode]').forEach((b) => b.classList.remove('selected'));
+          this.classList.add('selected');
+        });
+      });
+
+      document.getElementById('heatSlider').addEventListener('input', function () {
+        state.heatLevel = Number(this.value);
+        let text = 'ปิดไฟ ❄️';
+        if (state.heatLevel > 0 && state.heatLevel <= 35) text = 'ไฟอ่อน 🕯️';
+        else if (state.heatLevel > 35 && state.heatLevel <= 75) text = 'ไฟกลาง 🔥';
+        else if (state.heatLevel > 75) text = 'ไฟแรงลุกท่วม 🔥🔥';
+        document.getElementById('heatLevelText').textContent = text;
+      });
+
+      document.getElementById('stirTossBtn').addEventListener('click', function () {
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2;
+        state.pieces.forEach((p) => {
+          p.x = cx + (Math.random() - 0.5) * 180;
+          p.y = cy + (Math.random() - 0.5) * 150;
+          p.rotation += (Math.random() - 0.5) * 1.4;
+        });
+        state.doneness = Math.min(100, state.doneness + 6);
+        updateCookDonenessBadge();
+      });
+
+      document.getElementById('resetCookBtn').addEventListener('click', function () {
+        state.doneness = 0;
+        updateCookDonenessBadge();
+      });
+
+      document.querySelectorAll('#seasoningPalette .ingredient-chip').forEach((chip) => {
+        chip.addEventListener('click', function () {
+          state.selectedSeasoning = this.dataset.item;
+          document.querySelectorAll('#seasoningPalette .ingredient-chip').forEach((c) => c.classList.remove('selected'));
+          this.classList.add('selected');
+        });
+      });
+
+      // Station 4 controls
+      document.querySelectorAll('#worldDishPalette .ingredient-chip').forEach((chip) => {
+        chip.addEventListener('click', function () {
+          state.selectedDish = this.dataset.dish;
+          document.querySelectorAll('#worldDishPalette .ingredient-chip').forEach((c) => c.classList.remove('selected'));
+          this.classList.add('selected');
+          const dish = WORLD_DISHES[state.selectedDish];
+          if (dish) {
+            state.dishTitle = dish.defaultTitle;
+            document.getElementById('dishCustomTitle').value = dish.defaultTitle;
+          }
+        });
+      });
+
+      document.getElementById('dishCustomTitle').addEventListener('input', function () {
+        state.dishTitle = this.value;
+      });
+
+      document.getElementById('scaleUpPieceBtn').addEventListener('click', function () {
+        if (state.activePieceIndex !== -1 && state.pieces[state.activePieceIndex]) {
+          state.pieces[state.activePieceIndex].scale *= 1.15;
+        }
+      });
+
+      document.getElementById('scaleDownPieceBtn').addEventListener('click', function () {
+        if (state.activePieceIndex !== -1 && state.pieces[state.activePieceIndex]) {
+          state.pieces[state.activePieceIndex].scale *= 0.86;
+        }
+      });
+
+      document.getElementById('rotatePieceBtn').addEventListener('click', function () {
+        if (state.activePieceIndex !== -1 && state.pieces[state.activePieceIndex]) {
+          state.pieces[state.activePieceIndex].rotation += Math.PI / 6;
+        }
+      });
+
+      document.getElementById('clearToppingsBtn').addEventListener('click', function () {
+        state.toppings = [];
+      });
+
+      document.getElementById('centerPiecesBtn').addEventListener('click', function () {
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2 - 10;
+        state.pieces.forEach((p, idx) => {
+          const angle = (idx / Math.max(1, state.pieces.length)) * Math.PI * 2;
+          const r = state.pieces.length > 1 ? 45 : 0;
+          p.x = cx + Math.cos(angle) * r;
+          p.y = cy + Math.sin(angle) * r;
+        });
+      });
+
+      // Export & Save triggers
+      document.getElementById('openExportModalBtn').addEventListener('click', openExportModal);
+      document.getElementById('savePngDirectBtn').addEventListener('click', function () {
+        const { pngLink } = openExportModal();
+        pngLink.click();
+      });
+      document.getElementById('downloadZipDirectBtn').addEventListener('click', function () {
+        const { zipLink } = openExportModal();
+        zipLink.click();
+      });
+      document.getElementById('closeExportModalBtn').addEventListener('click', function () {
+        document.getElementById('exportModal').classList.remove('open');
+      });
+
+      // Start render loop
+      requestAnimationFrame(tickSimulation);
+    })();
+  </script>
+</body>
+</html>
